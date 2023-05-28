@@ -1,11 +1,9 @@
 package br.com.mundim.rede.social.entity;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity

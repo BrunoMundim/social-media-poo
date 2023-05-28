@@ -1,10 +1,9 @@
 package br.com.mundim.rede.social.entity;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,21 +18,33 @@ public class Page {
     private String pageName;
     @Column(name = "page_description")
     private String pageDescription;
+    @ElementCollection
     @Column(name = "posts_id")
     private List<Long> postsId;
     @Column(name = "moderators_id", nullable = false)
-    private List<Long> ModeratorsId;
+    private List<Long> moderatorsId;
     @Column(name = "createdAt", nullable = false)
     private LocalDateTime createdAt;
     @Column(name = "updatedAt")
     private LocalDateTime updatedAt;
+    @Column(name = "followed")
+    private List<String> followed; // "Tipo ID" - Tipo: PAGE or USER
+
+    public Page(){}
+
+    public Page(String pageName, String pageDescription, Long moderator) {
+        this.pageName = pageName;
+        this.pageDescription = pageDescription;
+        this.postsId = new ArrayList<>();
+        this.moderatorsId = new ArrayList<>();
+        this.moderatorsId.add(moderator);
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+        this.followed = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getPageName() {
@@ -61,11 +72,11 @@ public class Page {
     }
 
     public List<Long> getModeratorsId() {
-        return ModeratorsId;
+        return moderatorsId;
     }
 
     public void setModeratorsId(List<Long> moderatorsId) {
-        ModeratorsId = moderatorsId;
+        this.moderatorsId = moderatorsId;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -82,5 +93,13 @@ public class Page {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<String> getFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(List<String> followed) {
+        this.followed = followed;
     }
 }

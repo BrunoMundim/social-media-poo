@@ -29,6 +29,8 @@ public class PostService {
         return repository.findAll();
     }
 
-    // updateLikePost(Long userId)
-    // updateDislikePost(Long userId)
+    public List<Post> findPostByUserId(Long id){
+        return repository.findByUserId(id);
+    }
+
 }

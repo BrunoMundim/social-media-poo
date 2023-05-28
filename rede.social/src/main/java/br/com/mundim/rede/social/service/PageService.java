@@ -29,4 +29,8 @@ public class PageService {
         repository.deleteById(id);
     }
 
+    public List<Long> findAllPostsFromPage(Long pageId){
+        return repository.findAllPosts(pageId);
+    }
+
 }

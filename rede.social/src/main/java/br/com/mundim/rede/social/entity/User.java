@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,7 +29,9 @@ public class User {
     @Column(name = "updatedAt", nullable = false)
     private LocalDateTime updatedAt;
     @Column(name = "following")
-    private List<Long> following;
+    private List<String> following; // "Tipo ID" - Tipo: PAGE or USER
+    @Column(name = "followed")
+    private List<String> followed; // "Tipo ID" - Tipo: PAGE or USER
 
     public User() {
     }
@@ -40,6 +43,8 @@ public class User {
         this.profilePic = profilePic;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.following = new ArrayList<>();
+        this.followed = new ArrayList<>();
     }
 
     public Long getId() {
@@ -96,5 +101,21 @@ public class User {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<String> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<String> following) {
+        this.following = following;
+    }
+
+    public List<String> getFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(List<String> followed) {
+        this.followed = followed;
     }
 }

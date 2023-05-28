@@ -2,6 +2,7 @@ package br.com.mundim.rede.social.controller;
 
 import br.com.mundim.rede.social.dto.PostDTO;
 import br.com.mundim.rede.social.entity.Post;
+import br.com.mundim.rede.social.service.PageService;
 import br.com.mundim.rede.social.service.PostService;
 import br.com.mundim.rede.social.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,6 +24,9 @@ public class PostController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PageService pageService;
 
     @PostMapping("/createPost")
     public ResponseEntity<Post> createPost(@RequestBody PostDTO postDTO){
@@ -52,6 +58,19 @@ public class PostController {
         return ResponseEntity.ok(service.findAllPosts());
     }
 
+    @GetMapping("/findPost/userId")
+    public ResponseEntity<List<Post>> findPostByUserId(@RequestParam Long userId){
+        return ResponseEntity.ok(service.findPostByUserId(userId));
+    }
+
+    @GetMapping("/findPost/pageId")
+    public ResponseEntity<List<Post>> findPostByPageId(@RequestParam Long pageId){
+        List<Long> postsIds = pageService.findAllPostsFromPage(pageId);
+        List<Post> posts = new ArrayList<>();
+        postsIds.forEach(post -> posts.add(service.findPostById(post)));
+        return ResponseEntity.ok(posts);
+    }
+
     @PutMapping("/like-post")
     public ResponseEntity<?> likePost(@RequestParam Long postId, Long userId){
         Post post = service.findPostById(postId);
@@ -65,6 +84,7 @@ public class PostController {
         if(likesIds.contains(userId)){
             likesIds.remove(userId);
             post.setLikesId(likesIds);
+            post.setUpdatedAt(LocalDateTime.now());
             return new ResponseEntity<Post>(service.savePost(post), HttpStatus.OK);
         }
         // Adiciona o like
@@ -74,6 +94,7 @@ public class PostController {
         }
         likesIds.add(userId);
         post.setLikesId(likesIds);
+        post.setUpdatedAt(LocalDateTime.now());
         return new ResponseEntity<Post>(service.savePost(post), HttpStatus.OK);
     }
 
@@ -90,6 +111,7 @@ public class PostController {
         if(dislikesIds.contains(userId)){
             dislikesIds.remove(userId);
             post.setDislikesId(dislikesIds);
+            post.setUpdatedAt(LocalDateTime.now());
             return new ResponseEntity<Post>(service.savePost(post), HttpStatus.OK);
         }
         // Adiciona o like
@@ -99,6 +121,7 @@ public class PostController {
         }
         dislikesIds.add(userId);
         post.setDislikesId(dislikesIds);
+        post.setUpdatedAt(LocalDateTime.now());
         return new ResponseEntity<Post>(service.savePost(post), HttpStatus.OK);
     }
 

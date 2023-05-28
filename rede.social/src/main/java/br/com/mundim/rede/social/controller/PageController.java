@@ -31,15 +31,7 @@ public class PageController {
 
     @PostMapping("/save")
     public ResponseEntity<Page> savePage(@RequestBody PageDTO pageDTO){
-        Page page = new Page();
-        page.setPageName(pageDTO.getPageName());
-        page.setPageDescription(pageDTO.getPageDescription());
-        List<Long> moderators = new ArrayList<>();
-        moderators.add(pageDTO.getCreatorId());
-        page.setModeratorsId(moderators);
-        page.setPostsId(new ArrayList<>());
-        page.setCreatedAt(LocalDateTime.now());
-        page.setUpdatedAt(LocalDateTime.now());
+        Page page = new Page(pageDTO.getPageName(), pageDTO.getPageDescription(), pageDTO.getCreatorId());
         return ResponseEntity.ok(service.savePage(page));
     }
 
