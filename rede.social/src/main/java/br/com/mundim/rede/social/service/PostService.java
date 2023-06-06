@@ -47,4 +47,12 @@ public class PostService {
         repository.deleteById(id);
     }
 
+    public List<Post> findByPostBodyContaining(String keyword){
+        return repository.findByPostBodyContaining(keyword);
+    }
+
+    public List<Post> findByPostTitleContaining(String keyword){
+        return repository.findByPostTitleContaining(keyword);
+    }
+
 }

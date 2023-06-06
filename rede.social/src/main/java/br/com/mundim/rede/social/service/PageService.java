@@ -54,4 +54,8 @@ public class PageService {
         return page.getPostsId();
     }
 
+    public List<Page> findByPageNameContaining(String keyword){
+        return repository.findByPageNameContaining(keyword);
+    }
+
 }

@@ -107,4 +107,16 @@ public class FeedController {
         return new PageImpl<>(sublist, pageable, allPostsView.size());
     }
 
+    @GetMapping("/search")
+    @ApiOperation(value = "Obtém uma lista com tudo aquilo que possui a palavra buscada")
+    public List<Object> search(@ApiParam("Palavra a ser buscada") String word) {
+        List<Object> founded = new ArrayList<>();
+        founded.addAll(userService.findByUsernameContaining(word));
+        founded.addAll(pageService.findByPageNameContaining(word));
+        founded.addAll(postService.findByPostBodyContaining(word));
+        founded.addAll(postService.findByPostTitleContaining(word));
+        return founded;
+    }
+
+
 }

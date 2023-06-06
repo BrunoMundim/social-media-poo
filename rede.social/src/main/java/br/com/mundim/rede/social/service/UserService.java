@@ -36,6 +36,10 @@ public class UserService {
         return repository.findAll();
     }
 
+    public List<User> findByUsernameContaining(String word){
+        return repository.findByUsernameContaining(word);
+    }
+
     public User findByUsername(String username){
         User user = repository.findUserByUsername(username);
         if(user == null) throw new BadRequestException("User with username '" + username + "' does not exist");

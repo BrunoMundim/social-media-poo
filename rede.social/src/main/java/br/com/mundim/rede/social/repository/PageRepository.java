@@ -16,4 +16,6 @@ public interface PageRepository extends JpaRepository<Page, Long> {
 
     Page findPageByPageName(String username);
 
+    List<Page> findByPageNameContaining(String keyword);
+
 }
