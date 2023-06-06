@@ -32,7 +32,7 @@ public class PageService {
 
     public Page findPageById(Long id){
         Page page = repository.findById(id).orElse(null);
-        if(page == null) throw new BadRequestException("Page with id " + id + " does not exists.");
+        if(page == null) throw new BadRequestException("Page with id '" + id + "' does not exists.");
         else return page;
     }
 
@@ -42,14 +42,14 @@ public class PageService {
 
     public void deletePage(Long id){
         Page page = repository.findById(id).orElse(null);
-        if(page == null) throw new BadRequestException("Page with id " + id + " does not exists.");
+        if(page == null) throw new BadRequestException("Page with id '" + id + "' does not exists.");
         repository.deleteById(id);
     }
 
     public List<Long> findAllPostsFromPage(Long pageId) {
         Page page = repository.findById(pageId).orElse(null);
         if (page == null) {
-            throw new BadRequestException("Page with id " + pageId + " does not exist.");
+            throw new BadRequestException("Page with id '" + pageId + "' does not exist.");
         }
         return page.getPostsId();
     }

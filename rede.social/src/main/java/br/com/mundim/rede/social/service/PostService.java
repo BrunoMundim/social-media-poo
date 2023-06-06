@@ -25,7 +25,7 @@ public class PostService {
 
     public Post findPostById(Long id){
         Post post = repository.findById(id).orElse(null);
-        if(post == null) throw new BadRequestException("Post with id "+id+" does not exists");
+        if(post == null) throw new BadRequestException("Post with id '"+id+"' does not exists");
         else return post;
     }
 
@@ -35,13 +35,13 @@ public class PostService {
 
     public List<Post> findPostByUserId(Long id){
         User user = userRepository.findById(id).orElse(null);
-        if(user == null) throw new BadRequestException("User with id "+id+" does not exists");
+        if(user == null) throw new BadRequestException("User with id '"+id+"' does not exists");
         else return repository.findByUserId(id);
     }
 
     public void deletePost(Long id){
         Post post = repository.findById(id).orElse(null);
-        if(post == null) throw new BadRequestException("Post with id "+id+" does not exists");
+        if(post == null) throw new BadRequestException("Post with id '"+id+"' does not exists");
 
 
         repository.deleteById(id);

@@ -42,6 +42,12 @@ public class UserController {
         return ResponseEntity.ok().body(service.findById(userId));
     }
 
+    @ApiOperation("Endpoint que busca um usuário pelo username")
+    @GetMapping("/find/username")
+    public ResponseEntity<User> findUserByUsername(@RequestParam String username){
+        return ResponseEntity.ok().body(service.findByUsername(username));
+    }
+
     @ApiOperation("Endpoint que cria um usuário")
     @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws BadRequestException {

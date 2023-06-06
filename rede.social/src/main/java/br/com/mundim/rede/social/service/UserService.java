@@ -28,7 +28,7 @@ public class UserService {
 
     public User findById(Long id){
         User user = repository.findById(id).orElse(null);
-        if(user == null) throw new BadRequestException("User with id " + id + " does not exist");
+        if(user == null) throw new BadRequestException("User with id '" + id + "' does not exist");
         else return user;
     }
 
@@ -36,9 +36,15 @@ public class UserService {
         return repository.findAll();
     }
 
+    public User findByUsername(String username){
+        User user = repository.findUserByUsername(username);
+        if(user == null) throw new BadRequestException("User with username '" + username + "' does not exist");
+        return user;
+    }
+
     public void deleteById(Long id){
         User user = repository.findById(id).orElse(null);
-        if(user == null) throw new BadRequestException("User with id " + id + " does not exist");
+        if(user == null) throw new BadRequestException("User with id '" + id + "' does not exist");
         else repository.deleteById(id);
     }
 }
