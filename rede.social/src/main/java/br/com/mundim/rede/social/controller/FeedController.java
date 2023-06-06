@@ -9,11 +9,13 @@ import br.com.mundim.rede.social.service.PageService;
 import br.com.mundim.rede.social.service.PostService;
 import br.com.mundim.rede.social.service.UserService;
 import br.com.mundim.rede.social.view.PostView;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +25,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping(value = "/feed")
+@Api(tags = "Feed")
 public class FeedController {
 
     @Autowired
@@ -86,11 +89,13 @@ public class FeedController {
         return postViews;
     }
 
-    @GetMapping("/posts")
+    @GetMapping
+    @ApiOperation(value = "Obter feed",
+            notes = "Retorna um pageable com uma lista dos posts de pessoas/páginas que o usuário segue ordenados por likes.")
     public PageImpl<PostView> userFeed(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam Long userId
+            @ApiParam(value = "Página atual") @RequestParam(defaultValue = "0") int page,
+            @ApiParam(value = "Tamanho da página") @RequestParam(defaultValue = "10") int size,
+            @ApiParam(value = "ID do usuário sendo buscado")@RequestParam Long userId
     ) {
         List<Post> allPosts = generateFeedUser(userId);
         List<PostView> allPostsView = creatingPostView(allPosts);

@@ -4,20 +4,19 @@ import br.com.mundim.rede.social.dto.PostDTO;
 import br.com.mundim.rede.social.entity.Comment;
 import br.com.mundim.rede.social.entity.Page;
 import br.com.mundim.rede.social.entity.Post;
-import br.com.mundim.rede.social.entity.User;
 import br.com.mundim.rede.social.exceptions.UnauthorizedRequestException;
 import br.com.mundim.rede.social.service.CommentService;
 import br.com.mundim.rede.social.service.PageService;
 import br.com.mundim.rede.social.service.PostService;
 import br.com.mundim.rede.social.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -25,6 +24,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/post")
+@Api(tags = "Post")
 public class PostController {
 
     @Autowired
@@ -39,27 +39,32 @@ public class PostController {
     @Autowired
     private CommentService commentService;
 
+    @ApiOperation("Endpoint que cria um novo post para um usuário")
     @PostMapping("/createPost")
     public ResponseEntity<Post> createPost(@RequestBody PostDTO postDTO){
         Post post = new Post(postDTO.getUserId(), null, postDTO.getPostTitle(), postDTO.getPostBody());
         return new ResponseEntity<Post>(service.savePost(post), HttpStatus.CREATED);
     }
 
+    @ApiOperation("Endpoint que localiza um post pelo ID")
     @GetMapping("/findPost")
     public ResponseEntity<Post> findPostById(@RequestParam Long postId){
         return ResponseEntity.ok(service.findPostById(postId));
     }
 
+    @ApiOperation("Endpoint que localiza todos os posts")
     @GetMapping("/findPost/all")
     public ResponseEntity<List<Post>> findAllPosts(){
         return ResponseEntity.ok(service.findAllPosts());
     }
 
+    @ApiOperation("Endpoint que localiza todos os posts de um usuário pelo seu ID")
     @GetMapping("/findPost/userId")
     public ResponseEntity<List<Post>> findPostByUserId(@RequestParam Long userId){
         return ResponseEntity.ok(service.findPostByUserId(userId));
     }
 
+    @ApiOperation("Endpoint que localiza todos os posts de uma página")
     @GetMapping("/findPost/pageId")
     public ResponseEntity<List<Post>> findPostByPageId(@RequestParam Long pageId){
         List<Long> postsIds = pageService.findAllPostsFromPage(pageId);
@@ -68,6 +73,7 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
+    @ApiOperation("Endpoint que permite um usuário dar like em um post")
     @PutMapping("/like-post")
     public ResponseEntity<?> likePost(@RequestParam Long postId, Long userId){
         Post post = service.findPostById(postId);
@@ -93,6 +99,7 @@ public class PostController {
         return new ResponseEntity<Post>(service.savePost(post), HttpStatus.OK);
     }
 
+    @ApiOperation("Endpoint que permite o usuário dar dislike em um post")
     @PutMapping("/dislike-post")
     public ResponseEntity<?> dislikePost(@RequestParam Long postId, Long userId){
         Post post = service.findPostById(postId);
@@ -118,6 +125,7 @@ public class PostController {
         return new ResponseEntity<Post>(service.savePost(post), HttpStatus.OK);
     }
 
+    @ApiOperation("Endpoint que permite o usuário comentar um post")
     @PutMapping("/add-comment")
     public ResponseEntity<Comment> addComment(@RequestParam Long postId, Long userId, @RequestBody String commentBody) {
         Post post = service.findPostById(postId);
@@ -128,6 +136,7 @@ public class PostController {
         return ResponseEntity.ok(comment);
     }
 
+    @ApiOperation("Endpoint que deleta um post pelo ID")
     @DeleteMapping("/deletePost")
     public ResponseEntity<String> deletePost(@RequestParam Long postId, Long userId){
         Post post = service.findPostById(postId);

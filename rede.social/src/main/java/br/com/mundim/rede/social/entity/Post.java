@@ -1,11 +1,10 @@
 package br.com.mundim.rede.social.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -28,14 +27,17 @@ public class Post {
     private String postTitle;
     @Column(name = "post_body", length = 2500, nullable = false)
     private String postBody;
+    @ElementCollection
     @Column(name = "likes")
     private List<Long> likesId;
+    @ElementCollection
     @Column(name = "dislikes")
     private List<Long> dislikesId;
     @Column(name = "createdAt", nullable = false)
     private String createdAt;
     @Column(name = "updatedAt", nullable = false)
     private String updatedAt;
+    @ElementCollection
     @Column(name = "comments_ids")
     private List<Long> commentsIds;
 

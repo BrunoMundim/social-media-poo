@@ -10,19 +10,22 @@ import br.com.mundim.rede.social.exceptions.UnauthorizedRequestException;
 import br.com.mundim.rede.social.service.PageService;
 import br.com.mundim.rede.social.service.PostService;
 import br.com.mundim.rede.social.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/pages")
+@Api(tags = "Page")
 public class PageController {
 
     @Autowired
@@ -34,22 +37,26 @@ public class PageController {
     @Autowired
     private UserService userService;
 
+    @ApiOperation("Endpoint que localiza todas as páginas")
     @GetMapping("/find/all")
     public ResponseEntity<List<Page>> findAllPages(){
         return ResponseEntity.ok(service.findAll());
     }
 
+    @ApiOperation("Endpoint que localiza uma página a partir do ID")
     @GetMapping("/find")
-    public ResponseEntity<Page> findPageById(@RequestParam Long pageId){
+    public ResponseEntity<Page> findPageById(@ApiParam(value = "ID da página") @RequestParam Long pageId){
         return ResponseEntity.ok(service.findPageById(pageId));
     }
 
+    @ApiOperation("Endpoint que cria uma página")
     @PostMapping("/create-page")
     public ResponseEntity<Page> savePage(@RequestBody PageDTO pageDTO){
         Page page = new Page(pageDTO.getPageName(), pageDTO.getPageDescription(), pageDTO.getCreatorId());
         return ResponseEntity.ok(service.savePage(page));
     }
 
+    @ApiOperation("Endpoint adiciona moderadores a página")
     @PutMapping("/moderators/add")
     public ResponseEntity<?> addModeratorsPage(@RequestParam Long pageId, Long moderatorId){
         Page page = service.findPageById(pageId);
@@ -67,6 +74,8 @@ public class PageController {
         return new ResponseEntity<Page>(service.savePage(page, false), HttpStatus.OK);
     }
 
+    @Order(5)
+    @ApiOperation("Endpoint que remove um moderador da página")
     @DeleteMapping("/moderators/delete")
     public ResponseEntity<?> deleteModeratorsPage(@RequestParam Long pageId, Long moderatorId){
         Page page = service.findPageById(pageId);
@@ -87,6 +96,8 @@ public class PageController {
         return new ResponseEntity<Page>(service.savePage(page, false), HttpStatus.OK);
     }
 
+    @Order(6)
+    @ApiOperation("Endpoint que cria um novo post na página")
     @PutMapping("/new-post")
     public ResponseEntity<?> createPost(@RequestParam Long pageId, @RequestBody PostDTO post){
         // Criando post
@@ -105,6 +116,9 @@ public class PageController {
 
         return new ResponseEntity<Post>(pagePost, HttpStatus.CREATED);
     }
+
+    @Order(7)
+    @ApiOperation("Endpoint que deleta uma página")
     @DeleteMapping("/delete")
     public ResponseEntity<?> deletePage(@RequestParam Long pageId, Long userId){
         Page page = service.findPageById(pageId);

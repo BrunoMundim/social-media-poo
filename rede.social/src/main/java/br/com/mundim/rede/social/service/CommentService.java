@@ -1,6 +1,5 @@
 package br.com.mundim.rede.social.service;
 
-import br.com.mundim.rede.social.dto.CommentDTO;
 import br.com.mundim.rede.social.entity.Comment;
 import br.com.mundim.rede.social.repository.CommentRepostory;
 import org.springframework.beans.factory.annotation.Autowired;

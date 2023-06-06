@@ -6,18 +6,22 @@ import br.com.mundim.rede.social.entity.User;
 import br.com.mundim.rede.social.exceptions.BadRequestException;
 import br.com.mundim.rede.social.service.PageService;
 import br.com.mundim.rede.social.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/user")
+@Api(tags = "User")
 public class UserController {
 
     @Autowired
@@ -26,22 +30,26 @@ public class UserController {
     @Autowired
     private PageService pageService;
 
+    @ApiOperation("Endpoint que mostra uma lista com todos os usuários")
+    @GetMapping("/findAll")
+    public ResponseEntity<List<User>> findAllUsers(){
+        return ResponseEntity.ok().body(service.findAll());
+    }
+
+    @ApiOperation("Endpoint que mostra um usuário a partir do ID")
+    @GetMapping("/find")
+    public ResponseEntity<User> findUserById(@RequestParam Long userId){
+        return ResponseEntity.ok().body(service.findById(userId));
+    }
+
+    @ApiOperation("Endpoint que cria um usuário")
     @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws BadRequestException {
         User user = new User(userDTO.getUsername(), userDTO.getPassword(), userDTO.getProfilePic());
         return new ResponseEntity<User>(service.save(user), HttpStatus.OK);
     }
 
-    @GetMapping("/find")
-    public ResponseEntity<User> findUserById(@RequestParam Long userId){
-        return ResponseEntity.ok().body(service.findById(userId));
-    }
-
-    @GetMapping("/findAll")
-    public ResponseEntity<List<User>> findAllUsers(){
-        return ResponseEntity.ok().body(service.findAll());
-    }
-
+    @ApiOperation("Endpoint que atualiza as informações de um usuário")
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO, @RequestParam Long userId){
         User user = service.findById(userId);
@@ -58,8 +66,10 @@ public class UserController {
         return new ResponseEntity<User>(service.save(user, usernameChanged), HttpStatus.OK);
     }
 
+    @ApiOperation("Endpoint que faz um usuário seguir outro usuário")
     @PutMapping("/follow/user")
-    public ResponseEntity<?> followUser(@RequestParam Long followedId, Long userId){
+    public ResponseEntity<?> followUser(@ApiParam("ID do usuário a ser seguido") @RequestParam Long followedId,
+                                        @ApiParam("ID do usuário que irá seguir")@RequestParam Long userId){
         User user = service.findById(userId);
         User followedUser = service.findById(followedId);
 
@@ -84,8 +94,10 @@ public class UserController {
         return new ResponseEntity<User>(service.save(user, false), HttpStatus.OK);
     }
 
+    @ApiOperation("Endpoint que faz um usuário seguir uma página")
     @PutMapping("/follow/page")
-    public ResponseEntity<?> followPage(@RequestParam Long followedId, Long userId){
+    public ResponseEntity<?> followPage(@ApiParam("ID da página a ser seguida") @RequestParam Long followedId,
+                                        @ApiParam("ID do usuário que irá seguir") @RequestParam Long userId){
         User user = service.findById(userId);
         Page page = pageService.findPageById(followedId);
 
@@ -109,6 +121,7 @@ public class UserController {
         return new ResponseEntity<User>(service.save(user, false), HttpStatus.OK);
     }
 
+    @ApiOperation("Endpoint que deleta um usuário")
     @DeleteMapping("/delete")
     public void deleteUser(@RequestParam Long userId){
         service.deleteById(userId);

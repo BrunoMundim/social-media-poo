@@ -1,12 +1,10 @@
 package br.com.mundim.rede.social.entity;
 
-import jakarta.annotation.Nonnull;
-import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.lang.NonNull;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -30,13 +29,12 @@ public class User {
     private String createdAt;
     @Column(name = "updatedAt", nullable = false)
     private String updatedAt;
+    @ElementCollection
     @Column(name = "following")
     private List<String> following; // "Tipo ID" - Tipo: PAGE or USER
+    @ElementCollection
     @Column(name = "followed")
     private List<String> followed; // "Tipo ID" - Tipo: PAGE or USER
-
-    public User() {
-    }
 
     public User(String username, String password, String profilePic) {
         this.username = username;

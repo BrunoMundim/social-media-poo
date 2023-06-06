@@ -1,11 +1,10 @@
 package br.com.mundim.rede.social.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -29,12 +28,14 @@ public class Page {
     @ElementCollection
     @Column(name = "posts_id")
     private List<Long> postsId;
+    @ElementCollection
     @Column(name = "moderators_id", nullable = false)
     private List<Long> moderatorsId;
     @Column(name = "createdAt", nullable = false)
     private String createdAt;
     @Column(name = "updatedAt")
     private String updatedAt;
+    @ElementCollection
     @Column(name = "followed")
     private List<String> followed; // "Tipo ID" - Tipo: PAGE or USER
 

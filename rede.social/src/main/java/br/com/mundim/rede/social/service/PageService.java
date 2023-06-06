@@ -46,10 +46,12 @@ public class PageService {
         repository.deleteById(id);
     }
 
-    public List<Long> findAllPostsFromPage(Long pageId){
+    public List<Long> findAllPostsFromPage(Long pageId) {
         Page page = repository.findById(pageId).orElse(null);
-        if(page == null) throw new BadRequestException("Page with id " + pageId + " does not exists.");
-        return repository.findAllPosts(pageId);
+        if (page == null) {
+            throw new BadRequestException("Page with id " + pageId + " does not exist.");
+        }
+        return page.getPostsId();
     }
 
 }

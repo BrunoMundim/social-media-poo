@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
-import java.text.SimpleDateFormat;
-
 @Data
 @AllArgsConstructor
 public class ApiException {
